@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topcuoğlu Kasap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #FF0000;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .nav {
+            background-color: #FFFFFF;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .nav a {
+            text-decoration: none;
+            margin: 0 15px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .product-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .price {
+            color: #FF0000;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .add-to-cart {
+            background-color: #FF0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .close-btn {
+            float: right;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .nav a {
+                margin: 0 10px;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Topcuoğlu Kasap</h1>
+        <p>Taze ve Kaliteli Et Ürünleri</p>
+    </div>
+
+    <div class="nav">
+        <a href="#home">Ana Sayfa</a>
+        <a href="#products">Ürünler</a>
+        <a href="#about">Hakkımızda</a>
+        <a href="#contact">İletişim</a>
+    </div>
+
+    <div class="container" id="products">
+        <h2>Ürünlerimiz</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/200x150" alt="Koyun Eti" class="product-image">
+                <h3>Koyun Eti</h3>
+                <p>Çeşitli kesimler</p>
+                <span class="price">50 TL/kg</span>
+                <button class="add-to-cart" onclick="addToCart('Koyun Eti', 50)">Sepete Ekle</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/200x150" alt="Sığır Eti" class="product-image">
+                <h3>Sığır Eti</h3>
+                <p>Çeşitli kesimler</p>
+                <span class="price">65 TL/kg</span>
+                <button class="add-to-cart" onclick="addToCart('Sığır Eti', 65)">Sepete Ekle</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/200x150" alt="Tavuk Eti" class="product-image">
+                <h3>Tavuk Eti</h3>
+                <p>Organik tavuk eti</p>
+                <span class="price">40 TL/kg</span>
+                <button class="add-to-cart" onclick="addToCart('Tavuk Eti', 40)">Sepete Ekle</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartModal" class="cart-modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>Sepetiniz</h2>
+        <div id="cartItems"></div>
+        <button onclick="placeOrder()" style="background-color: #FF0000; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Sipariş Ver</button>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(productName, price) {
+            cart.push({ productName, price });
+            alert(`${productName} sepete eklendi!`);
+            openModal();
+        }
+
+        function openModal() {
+            document.getElementById('cartModal').style.display = 'block';
+            updateCartView();
+        }
+
+        function closeModal() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function updateCartView() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            cartItemsDiv.innerHTML = '';
+            cart.forEach((item, index) => {
+                cartItemsDiv.innerHTML += `<p>${index + 1}. ${item.productName} - ${item.price} TL</p>`;
+            });
+        }
+
+        function placeOrder() {
+            if (cart.length === 0) {
+                alert('Sepetiniz boştur!');
+                return;
+            }
+            // Here you can add your order placement logic
+            alert('Siparişiniz alındı! Teşekkür ederiz.');
+            cart = [];
+            closeModal();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
